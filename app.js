@@ -59,7 +59,7 @@ app.use(async (ctx, next) => {
 
 app.use(
   koajwt({
-    secret: "123456"
+    secret: "secret"
   }).unless({
     path: [/^\/user\/regist/, /^\/user\/login/]
   })

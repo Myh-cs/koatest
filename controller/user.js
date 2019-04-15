@@ -34,12 +34,13 @@ const jwt = require("jsonwebtoken");
 const tools = require("../public/tool");
 
 //统一设置token有效时间  为了方便观察，设为10s
-const expireTime = "10s";
+const expireTime = "100s";
 //功能处理
 class userController {
   // 创建用户
   static async create(ctx) {
     const req = ctx.request.body;
+    console.log(ctx.request.body)
     if (req.mobileNo && req.password) {
       try {
         const query = await userModule.getUserInfo(req.mobileNo);
@@ -95,7 +96,7 @@ class userController {
               user: req.mobileNo,
               passWord: req.password
             },
-            "123456",
+            "secret",
             { expiresIn: expireTime }
           );
           const info = {
@@ -130,6 +131,7 @@ class userController {
     const token = ctx.headers.authorization;
     if (token) {
       try {
+        console.log(token)
         await tools.verToken(token);// try-catch来做token异常处理 所以result没使用
         if (!req.mobileNo) {
           return (ctx.body = {
@@ -153,6 +155,7 @@ class userController {
           }
         }
       } catch (error) {
+        console.log(error);
         ctx.status = 401;
         return (ctx.body = {
           code: "-1",
